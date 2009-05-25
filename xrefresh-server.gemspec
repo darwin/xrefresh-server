@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{xrefresh-server}
-  s.version = "0.1.0"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Antonin Hildebrand"]
@@ -12,14 +12,17 @@ Gem::Specification.new do |s|
   s.email = %q{antonin@hildebrand.cz}
   s.executables = ["xrefresh-server"]
   s.files = [
-    "License.txt",
-     "VERSION",
+    "VERSION",
      "bin/xrefresh-server",
-     "lib/client.rb",
-     "lib/monitor.rb",
-     "lib/server.rb",
      "lib/xrefresh-server.rb",
-     "license.txt"
+     "lib/xrefresh-server/client.rb",
+     "lib/xrefresh-server/client.rb",
+     "lib/xrefresh-server/monitor.rb",
+     "lib/xrefresh-server/monitor.rb",
+     "lib/xrefresh-server/server.rb",
+     "lib/xrefresh-server/server.rb",
+     "license.txt",
+     "readme.md"
   ]
   s.homepage = %q{http://github.com/darwin/xrefresh-server}
   s.rdoc_options = ["--charset=UTF-8"]

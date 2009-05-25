@@ -1,6 +1,3 @@
-$:.unshift(File.dirname(__FILE__)) unless
-  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
-
 module XRefreshServer
     VERSION = '0.1.0'
 
@@ -43,6 +40,7 @@ CONFIG
     
 end
 
-require 'client.rb'
-require 'server.rb'
-require 'monitor.rb'
+LIB_DIR = File.expand_path(File.dirname(__FILE__))
+require File.join(LIB_DIR, 'xrefresh-server/client.rb')
+require File.join(LIB_DIR, 'xrefresh-server/server.rb')
+require File.join(LIB_DIR, 'xrefresh-server/monitor.rb')

@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -rubygems
+#!/usr/bin/env ruby
 
 # This script watches modifications on the given directories, using the new # FSEvents API in Leopard.
 # Depends on rubycocoa!
@@ -7,20 +7,13 @@
 # Based on code by Dave Dribin
 # http://www.dribin.org/dave/blog/archives/2008/01/04/fswatch/
 
+require "rubygems"
 require 'set'
 require 'optparse'
 require 'ostruct'
 require "yaml"
-begin
-    require 'xrefresh-server'
-rescue LoadError
-    require '../lib/xrefresh-server.rb'
-end
-begin
-    require 'json'
-rescue LoadError
-    die 'You must "sudo gem install json" to get xrefresh monitor running'
-end
+require 'json'
+require 'xrefresh-server'
 
 module XRefreshServer
 
