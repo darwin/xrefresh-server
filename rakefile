@@ -9,7 +9,6 @@ begin
     s.homepage = "http://github.com/darwin/xrefresh-server"
     s.description = "XRefresh is browser refresh automation for web developers"
     s.authors = ["Antonin Hildebrand"]
-    s.files.include FileList['lib/xrefresh-server/*']
     s.files.exclude '.gitignore'
     s.files.exclude 'rakefile'
     s.files.exclude 'xrefresh-server.gemspec'

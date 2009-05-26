@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{xrefresh-server}
-  s.version = "0.1.4"
+  s.version = "0.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Antonin Hildebrand"]
@@ -16,10 +16,7 @@ Gem::Specification.new do |s|
      "bin/xrefresh-server",
      "lib/xrefresh-server.rb",
      "lib/xrefresh-server/client.rb",
-     "lib/xrefresh-server/client.rb",
      "lib/xrefresh-server/monitor.rb",
-     "lib/xrefresh-server/monitor.rb",
-     "lib/xrefresh-server/server.rb",
      "lib/xrefresh-server/server.rb",
      "license.txt",
      "readme.md"
