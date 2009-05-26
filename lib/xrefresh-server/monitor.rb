@@ -20,13 +20,13 @@ module XRefreshServer
                 root = FSEventStreamCopyPathsBeingWatched(stream).first
                 paths.regard_as('*')
                 numEvents.times do |n|
-                    $out.puts "Event: #{paths[n]}" if @config["debug"]
+                    OUT.puts "Event: #{paths[n]}" if @config["debug"]
                     @modified_dirs.add({:root=>root, :dir=>paths[n]})
                 end
             end
 
             @config["paths"].each do |path|
-                $out.puts "  monitoring #{path}"
+                OUT.puts "  monitoring #{yellow(path)}"
                 # need to create new stream for every supplied path
                 # because we want to report registered sources of the changes
                 stream = FSEventStreamCreate(
@@ -54,14 +54,14 @@ module XRefreshServer
         # blocking call
         def run_loop(start_time)
             
-            activities = {"changed" => '*', "deleted" => '-', "created" => '+', "renamed" => '>'}
+            activities = {"changed" => blue('*'), "deleted" => red('-'), "created" => green('+'), "renamed" => magenta('>')}
             
             # main loop
-            $out.puts "Waiting for file system events ..."
+            OUT.puts "Waiting for file system events ..."
             not_first_time = false
             loop do
                 if @server.stopped?
-                    $out.puts "Server stopped"
+                    OUT.puts "Server stopped"
                     break
                 end
                 @streams.each do |stream|
@@ -74,23 +74,23 @@ module XRefreshServer
                             dir = dir_info[:dir]
                             root = dir_info[:root]
                             unless dir=~@config["dir_include"]
-                                $out.puts "debug: #{dir} rejected because dir_include" if @config["debug"]
+                                OUT.puts "debug: #{dir} rejected because dir_include" if @config["debug"]
                                 next
                             end
                             if dir=~@config["dir_exclude"]
-                                $out.puts "debug: #{dir} rejected because dir_exclude" if @config["debug"]
+                                OUT.puts "debug: #{dir} rejected because dir_exclude" if @config["debug"]
                                 next
                             end
 
                             if File.exists?(dir)
-                                $out.puts "debug: checking dir #{dir}" if @config["debug"]
+                                OUT.puts "debug: checking dir #{dir}" if @config["debug"]
                                 Dir.foreach(dir) do |file|
                                     unless file=~@config["file_include"]
-                                        $out.puts "debug: #{file} rejected because file_include" if @config["debug"]
+                                        OUT.puts "debug: #{file} rejected because file_include" if @config["debug"]
                                         next
                                     end
                                     if file=~@config["file_exclude"]
-                                        $out.puts "debug: #{file} rejected because file_exclude" if @config["debug"]
+                                        OUT.puts "debug: #{file} rejected because file_exclude" if @config["debug"]
                                         next
                                     end
 
@@ -98,17 +98,17 @@ module XRefreshServer
                                     next if File.directory?(full_path)
                                     begin
                                         stat = File.stat(full_path)
-                                        $out.puts "debug: stat #{full_path}" if @config["debug"]
+                                        OUT.puts "debug: stat #{full_path}" if @config["debug"]
                                     rescue
                                         # file may not exist
-                                        $out.puts "debug: stat failed #{full_path}" if @config["debug"]
+                                        OUT.puts "debug: stat failed #{full_path}" if @config["debug"]
                                         next # keep silence
                                     end
                                     current_time = stat.mtime.to_i
                                     original_time = @paths_info[full_path] || start_time
 
                                     if (current_time > original_time)
-                                        $out.puts "debug: reported #{full_path}" if @config["debug"]
+                                        OUT.puts "debug: reported #{full_path}" if @config["debug"]
                                         relative_path = full_path[root.size+1..-1]
                                         buckets[root]||=[]
                                         buckets[root]<< {
@@ -129,7 +129,7 @@ module XRefreshServer
                                 }
                             end
                         rescue
-                            $out.puts "debug: exception! #{dir}" if @config["debug"]
+                            OUT.puts "debug: exception! #{dir}" if @config["debug"]
                             raise if @config["debug"]
                             next #keep silence
                         end
@@ -140,9 +140,9 @@ module XRefreshServer
 
                 if buckets.size
                     buckets.each do |root, files|
-                        $out.puts "  activity in #{root}:"
+                        OUT.puts "  activity in #{yellow(root)}:"
                         files.each do |file|
-                            $out.puts "    #{activities[file["action"]]} #{file["path1"]}"
+                            OUT.puts "    #{activities[file["action"]]} #{blue(file["path1"])}"
                         end
                         date = nil
                         time = nil

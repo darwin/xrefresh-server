@@ -12,26 +12,22 @@ require 'set'
 require 'optparse'
 require 'ostruct'
 require "yaml"
-require 'json'
-require 'xrefresh-server'
+require File.join(File.expand_path(File.dirname(__FILE__)), '..', 'lib', 'xrefresh-server.rb') # this form is important for local development
 
 module XRefreshServer
 
     ################################################################################
     # command-line parsing
 
-    $COMMAND = File.basename($0)
-    $USAGE = "Usage: #{$COMMAND} [OPTIONS]"
-    $VERSION = XRefreshServer::VERSION
-    $AGENT = "OSX xrefresh-server"
-    CONFIG_FILE = ".xrefresh-server.yml"
+    COMMAND = File.basename($0)
+    USAGE = "Usage: #{COMMAND} [OPTIONS]"
 
     options = OpenStruct.new
     options.output = "-"
     options.config = nil
 
     opts = OptionParser.new do |o|
-        o.banner = $USAGE
+        o.banner = USAGE
         o.separator ""
         o.separator "Specific options:"
 
@@ -55,7 +51,7 @@ module XRefreshServer
         end
 
         o.on_tail("-v", "--version", "Show version") do
-            puts $VERSION
+            puts XRefreshServer::VERSION
             exit
         end
     end
@@ -68,9 +64,9 @@ module XRefreshServer
 
     # initialize output handle
     if options.output == "-"
-        $out = $stdout.clone
+        OUT = $stdout.clone
     else
-        $out = File.open(options.output, "w")
+        OUT = File.open(options.output, "w")
     end
 
     ################################################################################
@@ -118,7 +114,6 @@ module XRefreshServer
 
     ################################################################################
     # run server
-    $out.puts "Starting server on #{CONFIG["host"]}:#{CONFIG["port"]} (max #{CONFIG["max_connections"]} clients)"
     server = Server.new(CONFIG["port"], CONFIG["host"], CONFIG["max_connections"], $stderr, CONFIG["audit"], CONFIG["debug"])
     server.start
 
@@ -133,5 +128,4 @@ module XRefreshServer
     ################################################################################
     # leave in peace
     $out.flush
-    exit(0)
 end

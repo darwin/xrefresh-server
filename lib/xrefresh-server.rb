@@ -1,5 +1,24 @@
+require 'json'
+begin
+  require 'term/ansicolor'
+  include Term::ANSIColor
+rescue LoadError
+  raise 'Run "sudo gem install term-ansicolor"'
+end
+# http://kpumuk.info/ruby-on-rails/colorizing-console-ruby-script-output/
+if PLATFORM =~ /win32/ then
+  begin
+    require 'win32console'
+    include Win32::Console::ANSI
+  rescue LoadError
+    raise 'Run "sudo gem install win32console" to use terminal colors on Windows'
+  end
+end
+
 module XRefreshServer
-    VERSION = '0.1.0'
+    VERSION = File.read(File.join(File.expand_path(File.dirname(__FILE__)), '..', 'VERSION'))
+    AGENT = "OSX xrefresh-server"
+    CONFIG_FILE = ".xrefresh-server.yml"
 
     def self.die(s)
         $stderr.puts s

@@ -5,12 +5,13 @@ module XRefreshServer
 
     # server
     class Server < GServer
-        attr :clients
+        attr_accessor :clients
 
-        def initialize(*args)
-            super(*args)
+        def initialize(port, host, max_connections, *args)
+            super
             @clients = Set.new
             @last_client_id = 0
+            OUT.puts "#{green('Started server')} on #{blue("#{host}:#{port}")} (max #{max_connections} clients)"
         end
 
         def serve(socket)
@@ -41,19 +42,19 @@ module XRefreshServer
         end
 
         def process(client, msg)
-            # see windows implementation in src/winmonitor/Server.cs#ProcessMessage
+            # see windows implementation in http://github.com/darwin/xrefresh/tree/master/src/winmonitor/Server.cs#ProcessMessage
             case msg["command"]
-            when "Hello"
-                type = msg["type"] || '?'
-                agent = msg["agent"] || '?'
-                $out.puts "Client ##{client.id} connected:  #{type} (#{agent})"
-                client.send_about($VERSION, $AGENT)
-            when "Bye"
-                @clients.delete(client)
-                $out.puts "Client ##{client.id} disconnected"
-            when "SetPage"
-                url = msg["url"] || '?'
-                $out.puts "Client ##{client.id} changed page to #{url}"
+                when "Hello"
+                    client.type = msg["type"] || '?'
+                    client.agent = msg["agent"] || '?'
+                    OUT.puts "Client #{client.name} [#{magenta(client.agent)}] has connected"
+                    client.send_about(VERSION, AGENT)
+                when "Bye"
+                    @clients.delete(client)
+                    OUT.puts "Client #{client.name} has disconnected"
+                when "SetPage"
+                    url = msg["url"] || '?'
+                    OUT.puts "Client #{client.name} changed page to #{blue(url)}"
             end
         end
     end

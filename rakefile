@@ -15,6 +15,7 @@ begin
     s.files.exclude 'xrefresh-server.gemspec'
     s.rubyforge_project = "xrefresh-server"
     s.add_dependency('json')
+    s.add_dependency('term-ansicolor')
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
