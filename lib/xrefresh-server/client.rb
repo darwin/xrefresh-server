@@ -21,7 +21,7 @@ module XRefreshServer
         def send(data)
             return if @dead
             begin
-                @socket << data.to_json
+                @socket << data.to_json + XREFRESH_MESSAGE_SEPARATOR
             rescue
                 OUT.puts "Client #{name} #{red("is dead")}"
                 @dead = true
@@ -37,6 +37,15 @@ module XRefreshServer
         end
 
         def send_do_refresh(root, name, type, date, time, files)
+            # read all CSS files and add them into response
+            contents = {}
+            files.each do |item|
+                next unless item["path1"] =~ /\.css$/
+                path = File.join(root, item["path1"]) 
+                content = File.open(path).read
+                contents[item["path1"]] = content
+            end
+            
             send({
               "command" => "DoRefresh", 
               "root" => root, 
@@ -44,7 +53,8 @@ module XRefreshServer
               "date" => date, 
               "time" => time, 
               "type" => type, 
-              "files" => files
+              "files" => files,
+              "contents" => contents
             })
         end
     end

@@ -19,25 +19,18 @@ module XRefreshServer
             @last_client_id += 1
             client = Client.new(@last_client_id, socket)
             @clients.add(client)
-            buffer = ""
             loop do
-                # accumulate incomming input in @buffer
                 begin
-                    buffer += socket.gets
+                    buffer = socket.gets(XREFRESH_MESSAGE_SEPARATOR)
                 rescue
+                    # socket breaks on client disconnection
                     break
                 end
-
-                begin
-                    # try to parse buffer
-                    msg = JSON.parse buffer
-                rescue
-                    # buffer may be incomplete due to packet fragmentation ...
-                else
-                    # got whole message => process it
-                    buffer = ""
-                    process(client, msg)
-                end
+                break unless buffer
+                message = buffer[0...-XREFRESH_MESSAGE_SEPARATOR.size]
+                OUT.puts "[debug] received: "+ message
+                json = JSON.parse(message)
+                process(client, json)
             end
         end
 

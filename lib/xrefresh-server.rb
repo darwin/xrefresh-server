@@ -19,6 +19,7 @@ module XRefreshServer
     VERSION = File.read(File.join(File.expand_path(File.dirname(__FILE__)), '..', 'VERSION'))
     AGENT = "OSX xrefresh-server"
     CONFIG_FILE = ".xrefresh-server.yml"
+    XREFRESH_MESSAGE_SEPARATOR = "---XREFRESH-MESSAGE---"
 
     def self.die(s)
         $stderr.puts s
