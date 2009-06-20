@@ -28,7 +28,6 @@ module XRefreshServer
                 end
                 break unless buffer
                 message = buffer[0...-XREFRESH_MESSAGE_SEPARATOR.size]
-                OUT.puts "[debug] received: "+ message
                 json = JSON.parse(message)
                 process(client, json)
             end
