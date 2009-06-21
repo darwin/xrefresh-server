@@ -42,7 +42,7 @@ paths:
 #   both exclude filters must not be satisfied
 # empty value means "apply no filtering"
 dir_include:
-dir_exclude: ^#{File.expand_path('~')}/Library|/\\.(svn|framework|app|pbproj|pbxproj|xcode(proj)?|bundle)/
+dir_exclude: ^#{File.expand_path('~')}/Library|/\\.(svn|git|framework|app|pbproj|pbxproj|xcode(proj)?|bundle)/
 file_include:
 file_exclude: ^(CVS|SCCS|vssver.?.scc|\\.(cvsignore|git|svn|DS_Store)|_svn|Thumbs\\.db)$|~$|^(\\.(?!htaccess)[^/]*|\\.(tmproj|o|pyc)|svn-commit(\\.[2-9])?\\.tmp)$ # merged TextMate and Netbeans patterns
 
