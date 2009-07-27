@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Antonin Hildebrand"]
-  s.date = %q{2009-07-26}
+  s.date = %q{2009-07-27}
   s.default_executable = %q{xrefresh-server}
   s.description = %q{XRefresh is browser refresh automation for web developers}
   s.email = %q{antonin@hildebrand.cz}
