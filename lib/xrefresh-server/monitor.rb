@@ -1,6 +1,7 @@
 require 'osx/foundation'
 OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
 include OSX
+require 'digest/md5'
 
 module XRefreshServer
     
@@ -12,6 +13,7 @@ module XRefreshServer
             @modified_dirs = Set.new
             @paths_info = Hash.new
             @streams = []
+            @checksums = Hash.new
         end
         
         def schedule(start_event_id)
@@ -49,6 +51,13 @@ module XRefreshServer
 
                 @streams << stream
             end
+        end
+        
+        def checksum_modified?(full_path)
+            digest = Digest::MD5.hexdigest(File.read(full_path))
+            return false if (@checksums[full_path]==digest)
+            @checksums[full_path]=digest
+            true
         end
         
         # blocking call
@@ -110,12 +119,16 @@ module XRefreshServer
                                     if (current_time > original_time)
                                         OUT.puts "debug: reported #{full_path}" if @config["debug"]
                                         relative_path = full_path[root.size+1..-1]
-                                        buckets[root]||=[]
-                                        buckets[root]<< {
-                                            "action" => "changed",
-                                            "path1" => relative_path,
-                                            "path2" => nil
-                                        }
+                                        if (checksum_modified?(full_path))
+                                            buckets[root]||=[]
+                                            buckets[root]<< {
+                                                "action" => "changed",
+                                                "path1" => relative_path,
+                                                "path2" => nil
+                                            }
+                                        else
+                                            OUT.puts "debug: not accepted - checksum is the same" if @config["debug"]
+                                        end
                                     end
                                     @paths_info[full_path] = current_time
                                 end
