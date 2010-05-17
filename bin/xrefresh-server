@@ -8,10 +8,12 @@
 # http://www.dribin.org/dave/blog/archives/2008/01/04/fswatch/
 
 require "rubygems"
+require 'bundler'
+Bundler.require
+require 'yaml'
 require 'set'
 require 'optparse'
 require 'ostruct'
-require "yaml"
 require File.join(File.expand_path(File.dirname(__FILE__)), '..', 'lib', 'xrefresh-server.rb') # this form is important for local development
 
 module XRefreshServer

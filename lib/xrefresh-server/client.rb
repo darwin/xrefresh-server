@@ -1,5 +1,3 @@
-require 'json'
-
 module XRefreshServer
 
   # client representation on server side

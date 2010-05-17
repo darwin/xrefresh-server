@@ -1,5 +1,4 @@
 require 'gserver'
-require 'json'
 
 module XRefreshServer
   class Server < GServer

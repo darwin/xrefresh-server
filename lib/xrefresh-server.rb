@@ -1,18 +1,7 @@
-require 'json'
-begin
-  require 'term/ansicolor'
-  include Term::ANSIColor
-rescue LoadError
-  raise 'Run "sudo gem install term-ansicolor"'
-end
+include Term::ANSIColor
 # http://kpumuk.info/ruby-on-rails/colorizing-console-ruby-script-output/
 if PLATFORM =~ /win32/ then
-  begin
-    require 'win32console'
-    include Win32::Console::ANSI
-  rescue LoadError
-    raise 'Run "sudo gem install win32console" to use terminal colors on Windows'
-  end
+  include Win32::Console::ANSI
 end
 
 module XRefreshServer
@@ -25,7 +14,7 @@ module XRefreshServer
         $stderr.puts s
         exit 1
     end
-    
+
     def self.generate_config(path)
         puts "Generating config in #{path}"
         File.open(path, "w") do |file|
@@ -48,7 +37,7 @@ file_exclude: ^(CVS|SCCS|vssver.?.scc|\\.(cvsignore|git|svn|DS_Store)|_svn|Thumb
 
 # xpert settings
 host: #{GServer::DEFAULT_HOST}
-port: 41258 # known port for clients to connect 
+port: 41258 # known port for clients to connect
 max_connections: 4 # max client connections
 debug: false # run in debug mode?
 audit: false # audit server activity
@@ -57,7 +46,7 @@ sleep_time: 0.1 # don't hung cpu in main loop
 CONFIG
         end
     end
-    
+
 end
 
 LIB_DIR = File.expand_path(File.dirname(__FILE__))
