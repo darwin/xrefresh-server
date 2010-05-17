@@ -96,10 +96,10 @@ module XRefreshServer
     end
 
     # sanitize config values
-    CONFIG["dir_include"] = '.*' unless CONFIG["dir_include"] 
+    CONFIG["dir_include"] = '.*' unless CONFIG["dir_include"]
     CONFIG["file_include"] = '.*' unless CONFIG["file_include"]
-    CONFIG["dir_exclude"] = '^$' unless CONFIG["dir_exclude"] 
-    CONFIG["file_exclude"] = '^$' unless CONFIG["file_exclude"] 
+    CONFIG["dir_exclude"] = '^$' unless CONFIG["dir_exclude"]
+    CONFIG["file_exclude"] = '^$' unless CONFIG["file_exclude"]
     CONFIG["dir_include"] = Regexp.new(CONFIG["dir_include"])
     CONFIG["file_include"] = Regexp.new(CONFIG["file_include"])
     CONFIG["dir_exclude"] = Regexp.new(CONFIG["dir_exclude"])
@@ -119,11 +119,9 @@ module XRefreshServer
 
     ################################################################################
     # run filesystem monitoring loop
-    start_id = FSEventsGetCurrentEventId()
-    start_time = Time.now.to_i # used to compare with mtime, which only has second accuracy
     monitor = Monitor.new(server, CONFIG)
-    monitor.schedule(start_id)
-    monitor.run_loop(start_time) # blocking call
+    monitor.schedule
+    monitor.run_loop # blocking call
 
     ################################################################################
     # leave in peace

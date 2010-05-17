@@ -50,5 +50,5 @@ module XRefreshServer
             end
         end
     end
-    
+
 end
