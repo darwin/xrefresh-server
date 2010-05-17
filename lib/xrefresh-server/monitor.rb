@@ -1,5 +1,4 @@
 require 'directory_watcher'
-require 'pp'
 
 module XRefreshServer
   class Monitor
