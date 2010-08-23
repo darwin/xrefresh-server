@@ -35,7 +35,6 @@ module XRefreshServer
     end
 
     def send_do_refresh(root, name, type, date, time, files)
-      OUT.puts "About to send update to client. Files: #{files}"
       # read all CSS files and add them into response
       contents = {}
       files.each do |item|
